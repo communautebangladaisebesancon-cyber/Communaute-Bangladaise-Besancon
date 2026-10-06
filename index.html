@@ -228,7 +228,7 @@ async function loadData(){
     supabaseClient.from('members').select('*').order('created_at',{ascending:false})
   ]);
   if(appsRes.error||membersRes.error){throw new Error((appsRes.error||membersRes.error).message)}
-  var members=(membersRes.data||[]).map(function(r){return {id:'member-'+r.id,source:'member',dbId:r.id,applicationId:r.application_id,d:{prenom:r.prenom,nom:r.nom,dn:r.date_naissance,adr:r.adresse,cp:r.cp,ville:r.ville,tel:r.tel,email:r.email,sit:r.situation,type:r.membership_type,annee:'',statut:r.status,numero:r.member_number,created:r.created_at,adhesionDate:r.adhesion_date,valide:r.expiration_date,position:r.association_position||null}}});
+  var members=(membersRes.data||[]).map(function(r){return {id:'member-'+r.id,source:'member',dbId:r.id,applicationId:r.application_id,d:{dbId:r.id,prenom:r.prenom,nom:r.nom,dn:r.date_naissance,adr:r.adresse,cp:r.cp,ville:r.ville,tel:r.tel,email:r.email,sit:r.situation,type:r.membership_type,annee:'',statut:r.status,numero:r.member_number,created:r.created_at,adhesionDate:r.adhesion_date,valide:r.expiration_date,position:r.association_position||null}}});
   var memberAppIds=new Set(members.map(function(r){return r.applicationId}).filter(Boolean));
   var apps=(appsRes.data||[]).filter(function(r){return !memberAppIds.has(r.id)}).map(function(r){return {id:'app-'+r.id,source:'application',dbId:r.id,d:{prenom:r.prenom,nom:r.nom,dn:r.date_naissance,adr:r.adresse,cp:r.cp,ville:r.ville,tel:r.tel,email:r.email,sit:r.situation,type:r.membership_type,annee:r.membership_year,statut:r.status,numero:'',created:r.created_at,adhesionDate:'',valide:''}}});
   M=members.concat(apps);
